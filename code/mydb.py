@@ -49,6 +49,7 @@ class DB:
         for row in all_rows:
             print('{} {} {} {}'.format(*row))
         print()
+        return all_rows
 
     def insert_or_update_fruit(self, arg_fruit, number, price):
         """ 增修蔬果

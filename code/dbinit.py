@@ -1,11 +1,11 @@
 import os
 try:
-    os.unlink('toeic.db')
+    os.unlink('fruit.db')
 except:
     print('首次建檔')
 
 import sqlite3
-conn = sqlite3.connect('toeic.db')
+conn = sqlite3.connect('fruit.db')
 cur = conn.cursor()
 
 def show_all_rows(all_rows):
@@ -13,30 +13,18 @@ def show_all_rows(all_rows):
         print(row)
     print()
 
-# 單字表
-cur.execute('''CREATE TABLE WORDS
-    (ID integer, WORD text, DEFINITIONS text)''')
-# 單字表初始資料
-cur.execute("INSERT INTO WORDS VALUES (1, 'python', '全球最夯程式語言')")
-cur.execute("INSERT INTO WORDS VALUES (2, 'javascript', '網站開發程式語言')")
-cur.execute("INSERT INTO WORDS VALUES (3, 'c++', '資工必學程式語言')")
-cur.execute("INSERT INTO WORDS VALUES (4, 'algorithm', '演算法')")
-cur.execute("INSERT INTO WORDS VALUES (5, 'cryptography', '密碼學')")
-cur.execute("INSERT INTO WORDS VALUES (6, 'blockchain', '區塊鏈')")
+# 水果表
+cur.execute('''CREATE TABLE FRUIT
+    (ID integer, FRUIT text, QUANTITY integer, PRICE integer)''')
+# 水果表初始資料
+cur.execute("INSERT INTO FRUIT VALUES (1, '蘋果', 500, 15)")
+cur.execute("INSERT INTO FRUIT VALUES (2, '香蕉', 500, 10)")
+cur.execute("INSERT INTO FRUIT VALUES (3, '鳳梨', 500, 35)")
+cur.execute("INSERT INTO FRUIT VALUES (4, '橘子', 500, 7)")
 conn.commit()
-# 單字表批次新增資料
-row_id = 6
-fin = open('toeic-words.txt', 'rt', encoding='utf-8-sig')
-lines = fin.readlines()
-for line in lines:
-    # row_id 從 3 開始
-    row_id += 1
-    word, definition = line.split(': ')
-    cur.execute("INSERT INTO WORDS VALUES (?, ?, ?)", (row_id, word, definition.strip('\n')))
-conn.commit()    
-fin.close()
-# 查詢單字表
-cur.execute("SELECT * FROM WORDS")
+ 
+# 查詢水果
+cur.execute("SELECT * FROM FRUIT")
 show_all_rows(cur.fetchall())
 
 # 設定表
@@ -50,26 +38,31 @@ conn.commit()
 cur.execute("SELECT * FROM SETTINGS")
 show_all_rows(cur.fetchall())
 
-# 考生表
-cur.execute('''CREATE TABLE EXAMINEES
-    (ID integer, ACCOUNT text, NAME text, GENDER text, BIRTH_YEAR integer)''')
-# 考生表初始資料
-cur.execute("INSERT INTO EXAMINEES VALUES (1, 'chris', 'Chris Pine', 'M', 1980)")
-cur.execute("INSERT INTO EXAMINEES VALUES (2, 'gal', 'Gal Gadot', 'F', 1985)")
-conn.commit()
-# 查詢考生表
-cur.execute("SELECT * FROM EXAMINEES")
+#交易紀錄表
+cur.execute('''CREATE TABLE RECORD
+    (ID integer, ACCOUNT text, FRUIT text, PRICE integer, QUANTITY integer, DATETIME text)''')
+cur.execute("INSERT INTO RECORD VALUES (1, 'chris1980', '蘋果', 15, 50, '2019-04-14 10:20:30') " )
+cur.execute("INSERT INTO RECORD VALUEs (2, 'gal1985', '香蕉', 10, 50, '2019-04-15 10:20:30') ")
 show_all_rows(cur.fetchall())
 
-# 成績表
-cur.execute('''CREATE TABLE SCORES
-    (ID integer, ACCOUNT text, TYPE text, SCORE integer, DATE_TIME text)''')
-# 成績表初始資料
-cur.execute("INSERT INTO SCORES VALUES (1, 'chris', 'multiple_choice', 100, '2019-04-10')")
-cur.execute("INSERT INTO SCORES VALUES (2, 'gal', 'fill_in_the_blank', 90, '2019-04-10')")
+# 顧客表
+cur.execute('''CREATE TABLE CUSTOMERS
+    (ID integer, ACCOUNT text, NAME text, GENDER integer, BIRTH_YEAR integer)''')
+# 顧客表初始資料
+cur.execute("INSERT INTO CUSTOMERS VALUES (1, 'dora', 'Dora ya', 1, 2001)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (2, 'chris', 'Chris evan', 1, 1980)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (3, 'diego', 'diego go', 1, 1999)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (4, 'elizabeth', 'elizabeth olsen', 0, 1975)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (5, 'peter', 'peter parker', 1, 1985)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (6, 'doctor', 'doctor strange', 1, 1989)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (7, 'hank', 'hank pym', 1, 1995)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (8, 'barry', 'barry allen', 0, 1988)")
+cur.execute("INSERT INTO CUSTOMERS VALUES (9, 'robert', 'robert downeyjr ', 1, 1990)")
 conn.commit()
-# 查詢成績表
-cur.execute("SELECT * FROM SCORES")
+# 查詢顧客
+cur.execute("SELECT * FROM CUSTOMERS")
 show_all_rows(cur.fetchall())
+
+
 
 conn.close()

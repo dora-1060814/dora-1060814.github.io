@@ -1,5 +1,6 @@
 # acustomer.py
 from mydb import DB
+import random
 
 class Customer:
     def __init__(self):
@@ -82,16 +83,19 @@ class Customer:
             # 個人做完一筆購買之後
             # 要以亂數選取其他顧客，數量 n 亂選：random.sample(顧客list/tuple, random.randint(1, n))
             other_customers = db.other_customers()
-            print(other_customers)
-            # other_customers = random.sample(other_customers, random.randint(1, len(other_customers)))
+            # print(other_customers)
+            other_customers = random.sample(other_customers, random.randint(1, len(other_customers)))
+            
             # 每位要買的顧客，都亂選水果及購買數量
             # 動作會很類似 db.book_fruit() 裡面的程式
-            # db.book_fruit(selected_customer, rand_fruit, rand_quantity)
-            # for customer in other_customers:
-            #     # 選取的水果是否還有存量
-            #     rand_fruit = ?
-            #     rand_quantity = ?
-            #     db.book_fruit(customer, rand_fruit, rand_quantity)
+            for customer in other_customers:
+                print(customer[0])
+                # # 選取的水果是否還有存量
+                rand_fruit = random.sample(db.list_all_fruit(), 1)
+                rand_quantity = random.randint(1, rand_fruit[0][2])
+                db.book_fruit(customer[0], rand_fruit[0][0], rand_quantity)
+                
+
 
 
 # entry point
