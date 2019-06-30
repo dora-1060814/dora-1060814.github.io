@@ -72,12 +72,23 @@ class Customer:
         """
         
         while True:
-            db.list_all_fruit()
+            all_fruit = db.list_all_fruit()
+           # all_fruit[0][2] # 1. apple
+           # all_fruit[1][2] # 2. banana
             book = input('choose a fruit or quit  ')
             if book.lower() == 'quit':
                 break
             book = int(book)
             quantity = int(input('quantity?  '))
+            # 當存量為0或小於 quantity，不允許購買
+            # 存量已經為0，可以考慮不顯示選項，但也要避免誤選而發生錯誤
+            if all_fruit[book-1][2] == 0:
+                print('賣完了')
+                continue
+            elif all_fruit[book-1][2] < quantity:
+                print('數量不足')
+                continue
+                
             db.book_fruit(self.account, book, quantity)
             db.list_record_fruit(self.account)
             # 個人做完一筆購買之後
@@ -90,11 +101,12 @@ class Customer:
             # 動作會很類似 db.book_fruit() 裡面的程式
             for customer in other_customers:
                 print(customer[0])
-                # # 選取的水果是否還有存量
                 rand_fruit = random.sample(db.list_all_fruit(), 1)
                 rand_quantity = random.randint(1, rand_fruit[0][2])
+                print(rand_fruit[0][2])
+                # 模擬顧客購買完之後，應該是要顯示類似個人購買的明細列表，而不要顯示全部存量
                 db.book_fruit(customer[0], rand_fruit[0][0], rand_quantity)
-                
+                print()
 
 
 
