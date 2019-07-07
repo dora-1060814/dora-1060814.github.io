@@ -16,7 +16,7 @@ class Customer:
         self.menu_func = {
             'a': lambda db, ft: self.login_or_signup(db, ft),
             'b': lambda db, ft: self.book_fruit(db, ft),
-            'c': lambda db, ft: self.test_fill_in_the_blank(db, ft),
+            'c': lambda db, ft: self.show_records(db, ft),
             'd': lambda db, ft: self.customer_list(db, ft),
         }
         self.divider = '='*20
@@ -107,6 +107,23 @@ class Customer:
                 # 模擬顧客購買完之後，應該是要顯示類似個人購買的明細列表，而不要顯示全部存量
                 db.book_fruit(customer[0], rand_fruit[0][0], rand_quantity)
                 print()
+
+    def show_records():
+        # 詢問欲查詢的起迄日期
+        while True:
+            start_date = input('請輸入起始日期(q表示離開): ')
+            if start_date == '':
+                print('請再輸入一次')
+                continue
+            elif start_date == 'q':
+                break
+            else:
+                print('請再輸入一次')
+                continue
+
+
+        end_date = input('請輸入截止日期(未輸入則表示今天): ')
+        db.list_record_fruit(self.account, start_date, end_date)
 
 
 

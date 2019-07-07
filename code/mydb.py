@@ -204,19 +204,26 @@ class DB:
         now = datetime.now()
         return now.strftime("%Y-%m-%d")
 
-    def list_record_fruit(self,account):
+    def list_record_fruit(self,account, start_date='', end_date=''):
         """ # 1. 每採購一筆，就顯示當日購買的明細
             # 2. 列出 RECORD，SELECT 的 WHERE 條件要比對帳號及日期
             # 3. TOTAL 可以用計算欄位的方式設定在 SELECT
             # 4. SELECT 查詢欄位至少應該設定如下：
             #    蔬果列表
         """
-        # 前後加 % 符號是為了可以模糊查詢，模糊查詢要用 LIKE 運算子，不是 =
-        today = '%'+self.get_today()+'%'
-        print(account, today)
-        self.cur.execute("""SELECT ID, FRUIT, PRICE, QUANTITY, 
-            PRICE*QUANTITY AS TOTAL, DATETIME FROM RECORD 
-            WHERE ACCOUNT=? AND DATETIME LIKE ?""", (account, today))
+        if start_date == '' and end_date == '':
+            # 前後加 % 符號是為了可以模糊查詢，模糊查詢要用 LIKE 運算子，不是 =
+            today = '%'+self.get_today()+'%'
+            print(account, today)
+            self.cur.execute("""SELECT ID, FRUIT, PRICE, QUANTITY, 
+                PRICE*QUANTITY AS TOTAL, DATETIME FROM RECORD WHERE ACCOUNT=? 
+                AND DATETIME LIKE ?""", (account, today))
+        else:
+            if end_date == '':
+                end_date = self.get_today()
+            self.cur.execute("""SELECT ID, FRUIT, PRICE, QUANTITY, 
+                PRICE*QUANTITY AS TOTAL, DATETIME FROM RECORD WHERE ACCOUNT=? 
+                AND SUBSTR(DATETIME,1,10) BETWEEN ? AND ?""", (account, start_date, end_date))
         all_rows = self.cur.fetchall()
         print('{:7} {:2} {:2} {:3} {}'.format('水果', '數量', '單價',
          '總金額', '日期時間'))
